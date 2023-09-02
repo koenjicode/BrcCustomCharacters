@@ -2,6 +2,7 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using Reptile;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -16,7 +17,11 @@ namespace BrcCustomCharacters
             Logger.LogInfo($"{PluginInfo.PLUGIN_GUID} loaded.");
 
             Logger.LogInfo("Loading character assets...");
-            CustomAssets.Initialize(Paths.PluginPath);
+            // CustomAssets.Initialize(Paths.PluginPath);
+
+            CustomAssets.Initalize2(Paths.PluginPath);
+
+            Logger.LogInfo(string.Format("{0} character assets loaded.", CustomAssets._newCharacterBundles.Count));
             Logger.LogInfo("Character assets loaded.");
 
             Harmony harmony = new Harmony("io.sgiygas.brcCustomCharacters");

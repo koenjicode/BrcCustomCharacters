@@ -31,4 +31,8 @@
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir &quot;C:\Users\Koenji\AppData\Roaming\r2modmanPlus-local\BombRushCyberfunk\profiles\Testing\BepInEx\plugins\$(TargetName)&quot;&#xD;&#xA;xcopy /q/y/i &quot;$(TargetPath)&quot; &quot;C:\Users\Koenji\AppData\Roaming\r2modmanPlus-local\BombRushCyberfunk\profiles\Testing\BepInEx\plugins\$(TargetName)&quot; /E /H /C" />
+  </Target>
 </Project>

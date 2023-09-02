@@ -21,6 +21,12 @@ public static class CustomAssets
     private static Material[] _characterGraffiti;
     private static Dictionary<SfxCollectionID, CustomCharacterVoice> _characterVoices;
 
+    // FOR CUSTOM SLOTS
+    public static List<AssetBundle> _newCharacterBundles;
+    public static List<CustomCharacterVoice> _newCharacterVoices;
+
+
+    
     public static void Initialize(string pluginPath)
     {
         ASSET_PATH = Path.Combine(pluginPath, CHAR_ASSET_FOLDER);
@@ -42,7 +48,7 @@ public static class CustomAssets
                 AudioClip[] allVoices = _characterBundles[i].LoadAllAssets<AudioClip>();
                 if (allVoices.Length > 0)
                 {
-                    SfxCollectionID key = VoiceUtility.VoiceCollectionFromCharacter((Characters)i);
+                    SfxCollectionID key = VoiceUtility.VoiceCollectionFromCharacter((Characters)3);
                     _characterVoices.Add(key, new CustomCharacterVoice());
                     foreach (AudioClip voice in allVoices)
                     {
@@ -78,6 +84,72 @@ public static class CustomAssets
                 }
             }
         }
+    }
+
+    public static void Initalize2(string pluginPath)
+    {
+        ASSET_PATH = Path.Combine(pluginPath, CHAR_ASSET_FOLDER);
+
+        _newCharacterBundles = LoadCharacterBundles();
+        _characterGraffiti = new Material[_newCharacterBundles.Count];
+        _characterVoices = new Dictionary<SfxCollectionID, CustomCharacterVoice>();
+
+        for (int i = 0; i < _newCharacterBundles.Count; i++)
+        {
+            Material graffiti = _characterBundles[i].LoadAsset<Material>(CharUtil.GRAFFITI_ASSET);
+            _characterGraffiti[i] = graffiti;
+
+            AudioClip[] allVoices = _characterBundles[i].LoadAllAssets<AudioClip>();
+            if (allVoices.Length > 0)
+            {
+                _newCharacterVoices.Add(new CustomCharacterVoice());
+                foreach (AudioClip voice in allVoices)
+                {
+                    if (voice.name.EndsWith(VOICE_DIE_SUFFIX))
+                    {
+                        _newCharacterVoices[i].VoiceDie.Add(voice);
+                    }
+                    if (voice.name.EndsWith(VOICE_DIEFALL_SUFFIX))
+                    {
+                        _newCharacterVoices[i].VoiceDieFall.Add(voice);
+                    }
+                    if (voice.name.EndsWith(VOICE_TALK_SUFFIX))
+                    {
+                        _newCharacterVoices[i].VoiceTalk.Add(voice);
+                    }
+                    if (voice.name.EndsWith(VOICE_BOOSTTRICK_SUFFIX))
+                    {
+                        _newCharacterVoices[i].VoiceBoostTrick.Add(voice);
+                    }
+                    if (voice.name.EndsWith(VOICE_COMBO_SUFFIX))
+                    {
+                        _newCharacterVoices[i].VoiceCombo.Add(voice);
+                    }
+                    if (voice.name.EndsWith(VOICE_GETHIT_SUFFIX))
+                    {
+                        _newCharacterVoices[i].VoiceGetHit.Add(voice);
+                    }
+                    if (voice.name.EndsWith(VOICE_JUMP_SUFFIX))
+                    {
+                        _newCharacterVoices[i].VoiceJump.Add(voice);
+                    }
+                }
+            }
+        }
+    }
+
+    private static List<AssetBundle> LoadCharacterBundles()
+    {
+        List<AssetBundle> bundles = new List<AssetBundle>();
+        var filePaths = Directory.GetFiles(ASSET_PATH);
+
+        for (int i = 0; i < filePaths.Length; i++)
+        {
+            AssetBundle characterBundle = AssetBundle.LoadFromFile(filePaths[i]);
+            bundles.Add(characterBundle);
+        }
+
+        return bundles;
     }
 
     private static bool LoadCharacterBundle(Characters character, out AssetBundle bundle)
